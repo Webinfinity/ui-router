@@ -243,13 +243,13 @@ UrlMatcher.prototype.format = function (values) {
   for (i=0; i<nPath; i++) {
     value = values[params[i]];
     // TODO: Maybe we should throw on null here? It's not really good style to use '' and null interchangeabley
-    if (value != null) result += encodeURIComponent(value);
+    if (value != null) result += encodeURIComponent(String(value));
     result += segments[i+1];
   }
   for (/**/; i<nTotal; i++) {
     value = values[params[i]];
     if (value != null) {
-      result += (search ? '&' : '?') + params[i] + '=' + encodeURIComponent(value);
+      result += (search ? '&' : '?') + params[i] + '=' + encodeURIComponent(String(value));
       search = true;
     }
   }

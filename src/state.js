@@ -70,12 +70,34 @@ function $StateProvider(   $urlRouterProvider,   $urlMatcherFactory) {
 
     // Derive parameters for this state and ensure they're a super-set of parent's parameters
     params: function(state) {
-      if (!state.params) {
-        return state.url ? state.url.parameters() : state.parent.params;
+      var ret = [], i;
+      if (state.url) {
+        var urlParams = state.url.parameters();
+        if (urlParams) {
+          for (i = 0; i < urlParams.length; i++) {
+            ret.push(urlParams[i]);
+          }
+        }
       }
-      if (!isArray(state.params)) throw new Error("Invalid params in state '" + state + "'");
-      if (state.url) throw new Error("Both params and url specicified in state '" + state + "'");
-      return state.params;
+        
+      if (!state.params) {
+        if (state.parent && state.parent.params) {
+          for (i = 0; i < state.parent.params.length; i++) {
+            if (ret.indexOf(state.parent.params[i]) == -1) {
+              ret.push(state.parent.params[i]);
+            }
+          }
+        }
+      } else {
+        if (!isArray(state.params)) throw new Error("Invalid params in state '" + state + "'");
+        for (i = 0; i < state.params.length; i++) {
+          if (ret.indexOf(state.params[i]) == -1) {
+            ret.push(state.params[i]);
+          }
+        }
+      }
+        
+      return ret;
     },
 
     // If there is no explicit multi-view configuration, make one up so we don't have

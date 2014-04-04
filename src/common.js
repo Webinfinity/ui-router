@@ -109,18 +109,19 @@ function inheritParams(currentParams, newParams, $current, $to) {
 }
 
 /**
- * Normalizes a set of values to string or `null`, filtering them by a list of keys.
+ * Normalizes a set of values, filtering them by a list of keys.
  *
  * @param {Array} keys The list of keys to normalize/return.
  * @param {Object} values An object hash of values to normalize.
- * @return {Object} Returns an object hash of normalized string values.
+ * @param {Boolean} convert found values to string.
+ * @return {Object} Returns an object hash of normalized values.
  */
 function normalize(keys, values) {
   var normalized = {};
 
   forEach(keys, function (name) {
     var value = values[name];
-    normalized[name] = (value != null) ? String(value) : null;
+    normalized[name] = (value != null) ? (!isObject(value) ? String(value) : value) : null;
   });
   return normalized;
 }
